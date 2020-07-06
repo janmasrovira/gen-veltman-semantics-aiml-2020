@@ -1,0 +1,29 @@
+-----------------------------------------------
+BEGINNING OF REVIEW
+-----------------------------------------------
+The authors study some principles of general interpretability logic IL(All).
+The difficult problem of characterizing this logic is known since the 1990s.
+So far several formulas distinguishing it from the basic interpretability logic ILP have been found
+by different authors (Visser, Beklemishev, Joosten, Goris). The most recent findings are probably two infinite series of axioms considered in the submitted note, the narrow and the broad series. These axioms correspond to certain semantic conditions in Veltman semantics; their arithmetical soundness and correspondence was proved in [2], [3]
+(from the reference list of the paper).
+        In this note the authors are interested in characterization theorem for this series in generalized Veltman semantics (introduced by Verbrugge). They prove this theorem for the first principle of the narrow series and state
+it for the broad series. They have succeeded in proving the latter one using Agda proof assistant.
+        The note summarizes a nontrivial work done by the authors. Still, the motivation for this mathematical result is not quite clear. First, why generalized Veltman semantics is better in this case? In fact, the semantics conditions in section 2.2 do not look simpler than in [3], section 4.2. Second - once the characterization results are proved,
+they might be used to show that the all members of the series are non-equivalent; but this question is not put in the paper. One may also ask about completeness of the logic  (ILP + the known extra principles) in  generalized Veltman semantics.
+        So I could moderately recommend this short submission for AiML, with more discussion of related topics and open questions added.
+-----------------------------------------------
+END OF REVIEW
+-----------------------------------------------
+Thank you for your informative review.
+
+You wrote:
+Still, the motivation for this mathematical result is not quite clear. First, why generalised Veltman semantics is better in this case? In fact, the semantics conditions in section 2.2 do not look simpler than in [3], section 4.2. Second - once the characterization results are proved,
+they might be used to show that the all members of the series are non-equivalent; but this question is not put in the paper. One may also ask about completeness of the logic  (ILP + the known extra principles) in  generalised Veltman semantics.
+
+Response: this is indeed a good critique.
+Apart from the motivational sentence 
+"We work with Generalised Veltman semantics (GVS) as introduced by Verbrugge in [9] and defined below, since they allow for a more uniform treatment than regular Veltman semantics (see [7])." we already had, we have now included an additional sentence
+"For example, for various interpretability logics we have completeness with respect to generalised but not with respect to regular Veltman semantics." Also, the new Footnote 4 addresses and settles -- we hope-- your concern.
+
+
+

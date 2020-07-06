@@ -1,0 +1,8 @@
+The paper contributes to the area of provability logic.
+
+It considers two series of interpretability principles, and provides their semantic equivalents in terms of generalized Veltman frames. Then a formalization of the above correspondence results in the Agda proof assistant is discussed.
+
+I believe the paper will be of interest to the AiML-community.
+-----------------------------------------------
+END OF REVIEW
+-----------------------------------------------

@@ -1,0 +1,81 @@
+-----------------------------------------------
+BEGINNING OF REVIEW
+-----------------------------------------------
+The paper contains some worthwhile results about formalizing correspondence theory over generalized Veltman frames for interpretability logics, in the proof checker Agda, which has been designed and implemented by the first author.
+
+Of course a 5 pp short contribution it is hard to make choices, but I would propose to the authors to make some different choices. As it is, the paper shuts out readers who know a lot about modal logics but not about interpretability logics – the typical AiML community.
+
+So on the first two pages, I would propose to give a much slower introduction: what does A \interprets B stand for? Please give the most well-known axiom systems ILM and ILP and refer to a review on interpretability logics for the uninitiated modal logician, e.g. a suitable Visser paper or:
+
+Japaridze, G. and De Jongh, D., 1998. The logic of provability. In Studies in Logic and the Foundations of Mathematics (Vol. 137, pp. 475-546). Elsevier.
+
+At least also give the usual definition of Veltman frames before introducing Def. 1.1. Say that generalized Veltman models are reminiscent of neighborhood semantics for modal logics.
+
+In Section 2, at least give the principle R explicitly.
+
+Of course, adding such a slow introduction means that you also need to cut out material. The Theorems 2.1 and 2.2 can be formulated in one line each, because modal logicians are well acquainted with correspondence theory, so you can just say:
+
+Theorem 2.1 For any generalised Veltman frame F: F\models (R_1)_{gen} \Leftrightarrow F \forces R_1
+
+Similarly, you don’t need to introduce well-known modal logic notation as on p. 3 for [[A]].
+
+Finally, it might be a good idea in Section 2.2 to restrict to just R^1 and its corresponding frame condition (shorter and easier to read than the general one), and say that you generalize this in the full arXiv paper.
+
+Some details:
+
+p. 1, l. 2 of Section 1: Please replace ‘do for so for’ by ‘do for’
+
+p. 2, l. 2 of Def 1.1: It should be (P(W)\setminus \{\empyset\)}, not (P(W)\setminus \empyset) [which is the same as P(W)].
+
+p. 2, l. 4-5 of Def. 1.2: please separate the three different clauses more clearly by using ; (2 times)
+
+p. 3, l. 3-2 from bottom: Please delete one ‘following’ from ‘following following’
+
+p. 4: Please give a bit more intro on Agda, e.g. mentioning that it has been developed by the first author of the present paper together with Frederik Hanghøj Iversen
+-----------------------------------------------
+END OF REVIEW
+-----------------------------------------------
+
+Our responses:
+
+First of all, thank you very much for your informative review.
+
+So on the first two pages, I would propose to give a much slower introduction: what does A \interprets B stand for? Please give the most well-known axiom systems ILM and ILP and refer to a review on interpretability logics for the uninitiated modal logician, e.g. a suitable Visser paper or:
+
+Japaridze, G. and De Jongh, D., 1998. The logic of provability. In Studies in Logic and the Foundations of Mathematics (Vol. 137, pp. 475-546). Elsevier.
+
+Response: We have included some motivation and included a reference.
+
+At least also give the usual definition of Veltman frames before introducing Def. 1.1. Say that generalised Veltman models are reminiscent of neighborhood semantics for modal logics.
+
+Response: Unfortunately this would not fit in the five pages. We do mention it though and also mention the reminiscence with neighbourhood semantics.
+
+
+In Section 2, at least give the principle R explicitly.
+
+Response: we have now done so.
+
+
+
+Of course, adding such a slow introduction means that you also need to cut out material. The Theorems 2.1 and 2.2 can be formulated in one line each, because modal logicians are well acquainted with correspondence theory, so you can just say:
+
+Theorem 2.1 For any generalised Veltman frame F: F\models (R_1)_{gen} \Leftrightarrow F \forces R_1
+
+Response: Good suggestion, we have followed it.
+
+
+
+"p. 1, l. 2 of Section 1: Please replace ‘do for so for’ by ‘do for’"
+Done.
+
+"p. 2, l. 2 of Def 1.1: It should be (P(W)\setminus \{\empyset\)}, not (P(W)\setminus \empyset) [which is the same as P(W)]."
+Done.
+
+"p. 2, l. 4-5 of Def. 1.2: please separate the three different clauses more clearly by using ; (2 times)"
+Done.
+
+"p. 3, l. 3-2 from bottom: Please delete one ‘following’ from ‘following following’"
+Done.
+
+"p. 4: Please give a bit more intro on Agda, e.g. mentioning that it has been developed by the first author of the present paper together with Frederik Hanghøj Iversen".
+We have given a short introduction on Agda. The first author of the paper is not the author of Agda. Agda was first designed by Ulf Norell and now it is being mostly developed at Chalmers University of Technology. Maybe the reviewer visited https://github.com/agda/agda-ocaml which I developed with Frederik.

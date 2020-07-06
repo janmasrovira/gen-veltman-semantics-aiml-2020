@@ -1,0 +1,464 @@
+\documentclass[twoside]{aiml20}
+% Please include these macros
+\usepackage{aiml20macro}
+
+
+% Here you can include the standard packages you use.
+% Try to avoid using non-standard packages.
+% If you use a non-standard package you will have
+% to submit it when you submit the final version of
+% your paper.
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{stmaryrd}
+\usepackage{latexsym}
+\usepackage{cancel}
+\usepackage{xcolor}
+\usepackage{xspace}
+\usepackage{enumitem}
+
+\newcommand{\intl}[1]{{\ensuremath {\textup{\textbf{IL}}}({\rm #1})}}
+\newcommand{\provl}[1]{{\ensuremath {\textup{\textbf{PL}}}({\rm #1})}}
+\newcommand{\ilm}{\extil{M}}
+\newcommand{\ilp}{\extil{P}}
+\newcommand{\ilw}{\extil{W}}
+\newcommand{\ilr}{\extil{R}}
+\newcommand{\ilx}{\extil{X}}
+\newcommand{\ilmopo}{\extil{M_0P_0}}
+\newcommand{\ilmo}{\extil{M_0}}
+\newcommand{\ilwstar}{\extil{W^*}}
+\newcommand{\ilrstar}{\extil{R^*}}
+\newcommand{\ilwstarpenul}{\extil{P_0W^*}}
+\newcommand{\ilb}{\extil{B}}
+\newcommand{\ilal}{\intl{All}\xspace}
+\newcommand{\extil}[1]{\ensuremath{\textup{\textbf{IL}}{\sf\ensuremath{#1}}}\xspace}
+\newcommand{\il}{\ensuremath{\textup{\textbf{IL}}}\xspace}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Setting the correct page numbers
+% Ignore the next two commented lines
+% but please don't delete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\input{../procnum.tex}
+%\numbering{../aiml20db}{paper}
+
+% definitions specific to your article
+\newcommand{\ob}{[}
+\newcommand{\cb}{]}
+\newcommand{\principle}[1]{\text{$\mathsf{#1}$}}
+\newcommand{\kgen}[1]{\ensuremath{(\mathsf{#1})\textsubscript{gen}}}
+\newcommand{\kord}[1]{\text{($\mathsf{#1}$)\textsubscript{ord}}}
+
+\newcommand{\joost}[1]{\textcolor{purple}{\bf Joost: #1}}
+\newcommand{\jan}[1]{\textcolor{orange}{\bf Jan: #1}}
+\newcommand{\luka}[1]{\textcolor{blue}{\bf Luka: #1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%The following line defines the page header consisting of the surnames of the authors.
+% Please include only the last names!
+% Separate by commas except the last two surnames which are separated by an "and".
+\def\lastname{Mas, Mikec, Joosten}
+
+\begin{document}
+
+\begin{frontmatter}
+  \title{Generalised Veltman Semantics in Agda}
+  \author{Jan Mas Rovira}\footnote{\texttt{janmasrovira@gmail.com}, supported under grant number RTC-2017-6740-7. We thank the three anonymous referees for substantially improving the paper.}
+  \address{University of Barcelona}
+    \author{Luka Mikec}\footnote{\texttt{lmikec@math.hr}, supported by Croatian Science Foundation (HRZZ) under the projects UIP-05-2017-9219 and IP-01-2018-7459.
+    }
+  \address{Department of Mathematics, Faculty of Science, University of Zagreb 
+  }
+  \author{Joost J.\ Joosten}\footnote{\texttt{jjoosten@ub.edu}, supported by the Spanish Ministry of
+Science and Universities under grant number RTC-2017-6740-7, Spanish Ministry of Economy
+and Competitiveness under grant number FFI2015-70707P and the Generallitat de Catalunya
+under grant number 2017 SGR 270.}
+  \address{Department of Philosophy, University of Barcelona 
+  %\\ Carrer Montalegre 6 \\ 08001 Barcelona, Spain
+  }
+  \begin{abstract}
+    In this extended abstract we compute some rather involved frame conditions w.r.t.
+    Generalised Veltman Semantics for principles of interpretability logic.
+    All proofs have been formalised
+    in Agda and we briefly comment on this formalisation.
+
+  \end{abstract}
+
+  \begin{keyword}
+  Interpretability, Provability logic, Veltman semantics, Agda.
+  \end{keyword}
+\end{frontmatter}
+
+
+\section{Preliminaries}
+
+Interpretability logics aim to capture the provably structural behavior of formalised interpretability in the same sense as provability logics do for formalised provability. While any reasonable theory has the same provability logic this is not the case for interpretability, and reasonable finitely axiomatised theories have a different interpretability logic than theories with full induction. A major open problem in the field is to characterise the core logic, denoted \ilal, that generates the modal logical principles that hold in any reasonable theory. 
+
+This paper studies generalised frame conditions for two recently published (\cite{two-new-series}) series of principles in \ilal. We work with Generalised Veltman semantics (GVS) as introduced by Verbrugge in \cite{Verbrugge} and defined below, since they allow for a more uniform treatment than regular Veltman semantics (see \cite{Mikec-Vukovic-20}). For example, for various interpretability logics we have completeness with respect to generalised\footnote{Most notably the logic \ilr as defined below is complete w.r.t.~GVS. However, completenes w.r.t.~regular semantics is still open and seems hard. Since \ilr is the base case of the two series that we consider in this paper, we suspect that GVS is more likely to be useful for said series.} but not with respect to regular Veltman semantics. 
+
+Formulas $\mathcal F$ of interpretability logic are defined by $\mathcal F := {\sf Var} \mid \bot \mid \mathcal F \to \mathcal F \mid \Box \mathcal F \mid \mathcal F \rhd \mathcal F$ where $\sf Var$ is a countable set of propositional variables. Our reading convention stipulates the following binding from strong to weak: $\{ \neg, \Box \}$, $\{ \wedge, \vee \}$, $\rhd$, $\to$. The $\Box$ modality models formal provability with some base theory $T$ and $A\rhd B$ will stand for ``$T$ together with (the interpretation of) A interprets $T$ together (the interpretation of) B". We refer the interested reader to e.g.~\cite{JaparidzeJongh:1998:HandbookPaper}. We now give the definition of GVS which is similar to regular semantics but now using sets of worlds to model the binary $\rhd$-modality rather than just worlds. In this sense, GVS is reminiscent to neighbourhood semantics.
+% ()
+\begin{definition}  A generalised Veltman frame is a triple
+\(F=\langle W,R,S\rangle \) where the set of worlds \(W\) is nonempty, \(R\subseteq W^2\) and \(S\subseteq W\times W\times (\mathcal{P}(W)\setminus \{\varnothing\} )\). We write \(wRu\)
+instead of \(\langle w,u\rangle \in R\) and \(uS_wY\) instead of \(\langle w,u,Y\rangle \in S\). The structure must
+satisfy the following conditions :
+\begin{enumerate}[nosep]
+\item \(R\) is transitive and conversely well-founded;
+\item if \(uS_wY\) then \(wRu\) and for all \(y\in Y\) we have \(wRy\);
+\item if \(wRu\) then \(uS_w\{u\}\); and if \(wRu\) and \(uRv\) then \(uS_w\{v\}\);
+\item if \(uS_wY\) and \(yS_wZ_y\) for all \(y\in Y\), then \(uS_w\left(\bigcup _{y\in Y}Z_y\right)\).
+\end{enumerate}
+\end{definition}
+Frames extend to models by endowing them with a valuation on the set of propositional variables ${\sf Var}$.
+\begin{definition}
+\label{orgf390d7d}
+A generalised Veltman model is a pair \(M=\langle F,V\rangle \) with a generalised Veltman frame \(F\) and a valuation \(V\subseteq W\times {\sf Var}\).
+Given a model \(M\), we define a forcing relation \(\Vdash \subseteq W \times 
+    {\sf Fm}\) for all formulas extending provabilty forcing.
+  
+    Thus, $\neg (w\Vdash \bot)$;
+    % \luka{I would use $\nVdash$ instead of $\neg(...)$, since $\neg$ is also a part of the object language we're working on atm}
+    $w\Vdash A\to B$ iff $w\Vdash B$ or $\neg (w\Vdash A)$;  $w\Vdash \Box A$ iff $\forall u (wRu \Rightarrow u\Vdash A)$. Finally, we stipulate
+\begin{enumerate}[nosep]
+\item[] \(w\Vdash A\rhd B\) iff: if \(wRu\) and \(u\Vdash A\) then there exists \(Y\) such
+that \(Y\Vdash B\) and \(uS_wY\). When we write \(Y\Vdash B\) we mean that for all \(y\in Y\) we
+have \(y\Vdash B\).
+\end{enumerate}
+\end{definition}
+If \(F\) is a generalised Veltman frame and \(A\) a formula, we write \(F\Vdash A\) to
+denote that for every valuation we have \(\langle F,V\rangle \Vdash A \). For a given interpretability principle (a scheme of formulas)
+% \luka{I'd say "For a given intepretability principle (a scheme of formulas)"}
+\principle{X} we will denote by $(X)_{\sf gen}$ a first or higher order formula
+% \luka{if the reader doesn't already know what is meant, I think "model-theoretic expression" will be confusing; I think it's safe to assume people know what characteristic properties are and could use that phrase; or we could simply say "... or higher order formula"} 
+so that for a frame $F$ we have $F\Vdash \principle{X}$ for all instances of \principle{X} iff $F$ as a first or higher order structure validates $(X)_{\sf gen}$.
+
+%\subsection{Logic \(IL\)}
+%\label{sec:orgb0acc6b}
+%
+%\luka{if we keep this (I suggest we don't, we're only dealing with semantics), we should move this to the beginning of the document}
+%\jan{I agree to not keep this}
+%
+%The logic \(IL\) encompasses all classical tautologies in the new language plus
+%the following axiom schemes:
+%\begin{itemize}
+%\item K: \(\Box  (A \to  B) \to  \Box  A \to  \Box  B\)
+%\item L: \(\Box  (\Box  A \to  A) \to  \Box  A\)
+%\item J1: \(\Box  (A \to  B) \to  A \rhd  B\)
+%\item J2: \(A \rhd  B \wedge  B \rhd  C \to  A \rhd  C\)
+%\item J3: \((A \rhd  C \wedge  B \rhd  C) \to  (A \lor  B) \rhd  C\)
+%\item J4: \(A \rhd  B \to  \Diamond  A \to  \Diamond  B\)
+%\item J5: \(\Diamond  A \rhd  A\)
+%\end{itemize}
+%Additionally it has the following rules:
+%\begin{itemize}
+%\item Necessitation: if \(\vdash _{IL}A\) then \(\vdash _{IL}\Box A\).
+%\item Modus ponens: if \(\Pi \vdash _{IL}A\to B\) and \(\Pi \vdash _{IL}A\) then \(\Pi \vdash _{IL}B\).
+%\item Identity: If \(A\in \Pi \) then \(\Pi \vdash _{IL}A\).
+%\end{itemize}
+%
+%
+%The logic \(IL\) is sound and complete with both ordinary and generalised
+%Veltman semantics.
+
+\section{Frame conditions}
+The principle $\principle{R}: A \rhd  B \to  \neg  (A \rhd  \neg  C) \rhd  B \wedge  \Box  C$ was proven to be in \ilal~in \cite{GorisJoosten:2011:ANewPrinciple} and \cite{two-new-series} extends this to two new series: the so-called narrow and broad series. Apart from being in \ilal, not much more is currently known about the series and this paper constitutes some first progress.
+\label{sec:org39caeeb}
+\subsection{The narrow series}
+\label{sec:org224d3d5}
+This series has a more complex frame condition and we only comment on the first new principle in it, \(R_1\):
+$A \rhd  B \to  (\neg (A \rhd  \neg C)\wedge  (D\rhd \Diamond E))\rhd (B\wedge \Box C\wedge (D\rhd E))$.
+%
+%\subsubsection{Ordinary semantics}
+%\label{sec:orgd8b0ec4}
+%
+%The \(\kord{R_1}\) frame condition reads as follows:
+%\[\forall w,x,y,z(wRxRyS_wz\Rightarrow \forall u(zRu\Rightarrow yS_xu,\forall v(uS_xv\Rightarrow \forall m(vRm\Rightarrow uS_zm))))\]
+%
+%\begin{theorem}
+%For any ordinary frame \(F\), we have that \(F\) satisfies the
+%\(\kord{R_1}\) condition iff any model based on \(F\) forces every instantiation of
+%the \principle{R_1} principle. In symbols:
+%
+%\[F \vDash  \kord{R_1} \iff  F \Vdash  R_1\]
+%\end{theorem}
+To state the frame condition we define for $E$ a set that \(R^{-1}[E] \coloneqq  \{x : \exists y\in E. xRy\}\), and \(R_x^{-1}[E]\coloneqq R^{-1}[E]\cap R[x]\). 
+
+The \(\kgen{R_1}\) condition reads as follows:
+\begin{flalign*}
+\forall w,x,u,\mathbb{B},\mathbb{C},\mathbb{E} & \bigg(wRxRuS_w\mathbb{B}, \mathbb{C}\in \mathcal{C}(x,u) \\
+& \ \Rightarrow \  (\exists \mathbb{B}'\subseteq \mathbb{B})\Big(xS_w\mathbb{B}',R[\mathbb{B}']\subseteq \mathbb{C},(\forall v\in \mathbb{B}')(\forall c\in \mathbb{C}) \\
+& \hspace{2.5em} (vRcS_xR_x^{-1}[\mathbb{E}]\Rightarrow (\exists \mathbb{E}'\subseteq \mathbb{E})cS_v\mathbb{E}')\Big)\bigg).
+\end{flalign*}
+% \luka{I know it was me who realigned this formula, but I'm aware it's not really consistent; feel free to edit whichever way you'd like (it's important it fits the page, of course)}
+%\begin{flalign*}
+%&\forall w,x,u,\mathbb{B},\mathbb{C},\mathbb{E}(wRxRuS_w\mathbb{B}, \mathbb{C}\in \mathcal{C}(x,u) \\
+%\Rightarrow \ & (\exists \mathbb{B}'\subseteq \mathbb{B})(xS_w\mathbb{B}',R[\mathbb{B}']\subseteq \mathbb{C},(\forall v\in \mathbb{B}')(\forall c\in \mathbb{C})(\exists U\subseteq R_x^{-1}[\mathbb{E}],vRcS_xU)\Rightarrow (\exists \mathbb{E}'\subseteq \mathbb{E})cS_v\mathbb{E}')))
+%\end{flalign*}
+
+\begin{theorem}
+\label{orgf5f9e93}
+%For any generalised frame \(F\), we have that \(F\) satisfies the
+%\kgen{R_1} condition iff any model based on \(F\) forces every instantiation of
+%the \principle{R_1} principle. In symbols:
+$F\vDash \kgen{R_1}\iff F\Vdash R_1$.
+\end{theorem}
+
+\begin{proof}
+
+%\boxed{\Rightarrow } Let's fix the model and let \(w \in  W\) be arbitrary. Suppose \(w\Vdash  A
+%      \rhd B\), and let \(x\) be such that \(wRx\) and \(x\Vdash  \neg (A \rhd  \neg C) \wedge  (D \rhd  \Diamond E)\). It
+%follows from \(x \Vdash \neg (A \rhd \neg C)\) that there exists \(u\) such that \(xRu\) and \(u\Vdash A\), and for every \(Z\) such that \(uS_x Z\) there is some \(c_Z \in  Z\)
+%such that \(c_Z \Vdash C\). From \(wRu\), \(w\Vdash  A\rhd  B\) and \(u\Vdash  A\) it follows in particular
+%that there is a \(\mathbb{B}\), \(uS_w \mathbb{B} \Vdash B\). Let \(\mathbb{C} \coloneqq  \{c_Z: uS_x Z\}\). It is easy to
+%check that \(\mathbb{C} \in  \mathcal{C}(x, u)\). Let \(\mathbb{E} \coloneqq  [\Vdash E]\) (set of worlds that force \(E\)).
+%For the selected \(w, x, u, \mathbb{B}, \mathbb{C}, \mathbb{E}\) the property \(\kgen{R_1}\) implies
+%that there exists \(\mathbb{B}' \subseteq  \mathbb{B}\) such that:
+%\[
+%    xS_w\mathbb{B}',R[\mathbb{B}']\subseteq \mathbb{C} ,(\forall v\in \mathbb{B}')(\forall c\in \mathbb{C})(vRcS_xR_x^{-1}[\mathbb{E}]\Rightarrow (\exists \mathbb{E}'\subseteq \mathbb{E})cS_v\mathbb{E}').
+%\]
+%We have that \(\mathbb{B}' \Vdash B\) since \(\mathbb{B}'\subseteq \mathbb{B}\); and \(\mathbb{B}'\Vdash \Box  C\) since \(R[\mathbb{B}']\subseteq \mathbb{C}\). We now show
+%that \(\mathbb{B}'\Vdash  D\rhd  E\). Assume that for some \(c \in  R [\mathbb{B}']\) we have \(c\Vdash  D\). From
+%earlier we have \(x\Vdash  D \rhd  \Diamond E\). Since \(c \in  R [\mathbb{B} '] \subseteq  C \subseteq  R [x]\), then \(xRc\) so
+%it follows that there exists \(U\) such that \(cS_x U\) and \(U\Vdash \Diamond E\). Clearly
+%\(U\subseteq [\Diamond E]_x\) and also \([\Diamond E]_x\subseteq R[x]\), hence by monotonicity we have
+%\(cS_x[\Diamond E]_x\) which is the same as \(cS_x R_x^{-1}[\mathbb{E}]\) so by the above
+%property there exists \(\mathbb{E}'\subseteq \mathbb{E}\) such that \(cS_v \mathbb{E}'\). Because \(\mathbb{E}'\subseteq \mathbb{E}\) we have
+%\(\mathbb{E}'\Vdash E\).
+
+\boxed{\Leftarrow } We will only include one direction leaving the other as an exercise. Assume for a contradiction that \(F\nvDash \kgen{R_1}\). It follows that
+there exist \(w,x,u,\mathbb{B},\mathbb{C},\mathbb{E}\) such that \(wRxRuS_w\mathbb{B}\), \(\mathbb{C}\in \mathcal{C}(x,u)\) and:
+\begin{align*}
+    (\forall \mathbb{B}'\subseteq \mathbb{B})\big( & xS_w\mathbb{B}', R[\mathbb{B}']\subseteq \mathbb{C}\\
+    &\Rightarrow  (\exists v\in \mathbb{B}')(\exists c\in \mathbb{C})(\exists Z\subseteq R_x^{-1}[\mathbb{E}].vRcS_xZ,\forall \mathbb{E}'\subseteq \mathbb{E}.
+      c\cancel{S}_v \mathbb{E}')\big).
+\end{align*}
+
+Let \(\mathcal{V}\) be a family of sets, $\mathcal{V}\coloneqq  \{U : U\subseteq \mathbb{B}, xS_wU,R[U]\subseteq \mathbb{C}\}$.
+
+From the condition it follows that for every \(U\in \mathcal{V}\) the following is valid:
+\[(\exists v_U\in U)(\exists c_U\in \mathbb{C})(\exists Z_U\subseteq R_x^{-1}[\mathbb{E}](v_URc_US_xZ_U,(\forall \mathbb{E}'\subseteq \mathbb{E}) c_U\cancel{S}_{v_U} \mathbb{E}')).\]
+
+Let us fix such \(v_U\) and \(c_U\) and \(Z_U\) for all \(U\in \mathcal{V}\).
+
+Define a valuation such that the following applies:
+   $\llbracket a\rrbracket  = \{u\} $,
+   $\llbracket b\rrbracket  = \mathbb{B}$,
+   $\llbracket c\rrbracket  = \mathbb{C}$,
+   ${\llbracket d\rrbracket  = \{c_U:U\in \mathcal{V}\}}$,
+   $\llbracket e\rrbracket  = \mathbb{E}$. Note that for any formula $A$ we define $\llbracket A\rrbracket \coloneqq \{w:w\Vdash A\}$.
+
+By assumption we have \(w \Vdash  a \rhd  b \to  (\neg (a\rhd \neg c)\wedge (d\rhd \Diamond e))\rhd (b\wedge \Box c\wedge (d\rhd e))\).
+
+It is easy to see that \(w \Vdash  a \rhd  b\) and \(x \Vdash  \neg (a \rhd  \neg c)\).
+
+Let us prove \(x \Vdash  d\rhd \Diamond e\). Let \(xRc\Vdash  D\). Then \(c = c_U\) for some \(U \in  \mathcal{V}\).
+From the definition of \(c_U\) we have \(c_U S_x Z_U\), a forcing is defined
+such that \(e\) is true exactly on the set \(\mathbb{E}\). Hence \(R_x^{-1}[\mathbb{E}]\Vdash \Diamond e\) and
+since \(Z_U\subseteq R_x^{-1}[\mathbb{E}]\) it follows that \(x \Vdash  d\rhd \Diamond e\).
+
+We can also check that for \(U \in  \mathcal{V}\) we have \(U\Vdash  b \wedge  \Box c\) and the
+following condition holds for any set \(U\):
+\begin{flalign*}
+  (\star )\ xS_wU ,U\Vdash  b \wedge  \Box c\Rightarrow U\in  \mathcal{V}.
+\end{flalign*}
+
+Since \(w\Vdash a\rhd b\) and \(wRx\Vdash \neg(a\rhd \neg c)\wedge (d\rhd \Diamond e)\) there must exist some set \(U\)
+such that \(xS_wU\Vdash b\wedge \Box c\wedge (d\rhd e)\). From \((\star )\) it follows that that \(U\in \mathcal{V}\); hence
+there exist \(v_U,c_U,Z_U\) such that \(Z_U\subseteq R_x^{-1}[\mathbb{E}]\) and
+\(v_URc_US_xZ_U,(\forall \mathbb{E}'\subseteq \mathbb{E}) c_U\cancel{S}_{v_U} \mathbb{E}'\). Since \(c_U\Vdash d\) there must
+exist some \(Y\) such that \(c_US_{v_U}Y\Vdash e\), however, by the definition of
+the valuation it follows that \(Y\subseteq \mathbb{E}\) and thus \(c_U\cancel{S}_{v_U} Y\),
+which is a contradiction.
+\end{proof}
+
+\subsection{The broad series}
+
+In order to define the \principle{R^n} principles we first define a series of auxiliary formulas ${\sf U}_k$ via ${\sf U}_0 \coloneqq  \Diamond \neg (D_0\rhd \neg C)$ and ${\sf U}_{r+1} \coloneqq  \Diamond ((D_r\rhd D_{r+1}) \wedge  {\sf U}_r)$.
+Next, we define 
+\begin{flalign*}
+{\sf R}^0 & \coloneqq  A \rhd  B \to  \neg  (A \rhd  \neg  C) \rhd  B \wedge  \Box  C; \\
+{\sf R}^{n+1} & \coloneqq  A \rhd  B \to  ((D_{n}\rhd A) \wedge  {\sf U}_{n}) \rhd  B \wedge  \Box  C.
+\end{flalign*}
+For $n=1$ we have $\sf{R}^1=A \rhd  B \to  (\Diamond \neg (D \rhd  \neg C)\wedge  (D\rhd A))\rhd (B\wedge \Box C)$
+and the \(\kgen{R^1}\) condition reads as follows\footnote{We note that the definition of a scheme being frame valid is second order. As such, a methodological question urges itself (see \cite{MasRovira:2020:MastersThesis}) in the realm of neighborhood semantics and generalised Veltman semantics: what constitutes a \emph{natural} frame-condition?}:
+\begin{flalign*}
+&\forall w,x,y,z,\mathbb{A},\mathbb{B},\mathbb{C},\mathbb{D}. \\
+&wRxRyRz, \\
+& (\forall u.wRu,u\in \mathbb{A}\Rightarrow \exists V.uS_wV,V\subseteq \mathbb{B}), \\
+& (\forall u.xRu,u\in \mathbb{D}\Rightarrow \exists V.uS_xV,V\subseteq \mathbb{A}), \\
+& (\forall V.zS_yV\Rightarrow \exists v\in V.v\in \mathbb{C}),      \\
+& z\in \mathbb{D} \\
+\Rightarrow \ & \exists V\subseteq \mathbb{B}(xS_wV,R[V]\subseteq \mathbb{C}).
+\end{flalign*}
+We have generalised the previous condition to work for any $n$. The proof is formalised in Agda and can be found in 
+\cite{OverviewGeneralised,MasRovira:2020:MastersThesis}. We proceed by stating the theorem.
+\begin{theorem}
+\label{org9ce8c0d}
+$F\vDash \kgen{R^n}\iff F\Vdash {\sf R}^n$.
+\end{theorem}
+
+
+\section{Agda formalisation}
+%Agda is a dependently typed functional programming language based on an
+%xtension of an intuitionistic type theory by Martin-Löf
+%(\cite{martin1984intuitionistic}). 
+%
+%In broad terms, the cornerstone of dependent
+%types based proof assistants is the pair $term:type$. The $:$ symbol is
+%customary to denote the typing relation, which means: $term$ has type $type$.
+%Dependent types have great expressive power and allow properties such as
+%\textit{N is an even number, R is a transitive relation, P is a satisfiable
+%  predicate, etc.} to be expressed seamlessly in a type. By virtue of the
+%Curry-Howard correspondence we may freely interchange the construct $term:type$
+%by $proof:proposition$. This paradigm is often referred to as
+%\textit{propositions as types} (\cite{wadler2015propositions}). Let us remark
+%that terms are in fact executable programs that are guaranteed (by Agda's type
+%system) to give concrete evidence of the property they are proving.
+%
+%
+%
+%
+The proofs presented in this paper have been formalised in the Agda (\cite{norell:thesis}). Agda is a dependently typed language based on an extension of Per Martin-Löf's intuitionistic type theory. Dependent types allow the user to express mathematical properties with types and prove them by providing a term which inhabits such type.
+Its development mostly takes place at the Chalmers University of Technology.
+
+The presented advances in this paper are part of a
+broader project (\cite{MasRovira:2020:MastersThesis}) that aims at establishing
+a modern and state-of-the-art Agda library for interpretability logics, with a
+focus on generalised Veltman Semantics. To the best of our knowledge our work is the first
+attempt at formalising interpretability logics in Agda or any other proof
+assistant. By the time of this submission the library had around 4000 lines of code and
+includes, but is not limited to, the following features:
+\begin{itemize}[nosep]
+\item Formalisation of ordinary semantics, generalised semantics
+  and a plethora of useful lemmas to work on such semantics.
+\item Due to the many possible quasi-transitivity principles available for generalised
+  semantics (\cite{OverviewGeneralised}) we have defined generalised frames to be
+  parameterized by such condition. All known quasi-transitivity conditions are
+  included in the library and all theorems that do not directly depend on them can
+  be instantiated to work for any quasi-transitivity condition. It also includes
+  a thorough analysis of the interrelations between the alluded conditions.
+\item We have included proofs for a number of frame conditions. Both for
+  ordinary and generalised semantics. These include $\principle{M}$,
+  $\principle{P_0}$, $\principle{R}$, $\principle{M_0}$ for both semantics and
+  $\principle{R^n}$, $\principle{R_1}$ for generalised semantics.
+\item The library is not limited to semantics and it includes a definition of
+  the logic \il{}. 
+  %\luka{I'm guessing something else was meant to be said here?}
+  %\jan{No, but maybe is not clear enough? I mean that it includes the definition of a data type that represents syntactic IL proofs}
+  %\luka{Then it should be IL or ILX, not \il, right?}
+  It also includes an embedded domain specific language to
+  write Hilbert style proofs in a paper-like format. We plan on including derivations
+  of some of the most well known theorems of interpretability logics.
+  %\luka{I don't understand what is meant here} \jan{By a derivation I mean a Hilbert style proof or a representation of a syntactic proof in Agda. For instance, an agda object that represents $IL\vdash \Box\Box A \to \Box A$}
+  %\luka{It sounded like there would be arithmetical theorems; perhaps we could say "... of some of the most well known theorems of interpretability logics"? }
+% \item The library has a strong focus on being as general as the language allows. In that
+%   direction we have implemented the semantics as well as a big portion of the
+%   theorems to be polymorphic with respect to the Agda universe level (\cite{agda:universe-levels}). 
+%   \luka{Can this be expressed in simpler terms? If not, are there more technical terms or references that could be added so that it is at least not ambiguous to a person who knows about these things? }
+%   \jan{I had a short explanation on Levels but we had to remove it to respect the page limit. I can maybe add a reference to 
+%   the Agda documentation: \url{https://agda.readthedocs.io/en/v2.6.1/language/universe-levels.html}}
+%   \luka{I think it would suffice to say "Agda-universe levels" or something similar (the link is fine too of course)}
+  %\footnote{Agda's
+%    type system features a universe hierarchy to avoid the type in type problem,
+%    also known as Russell's paradox. Each type belongs to a universe level. The
+%    latter belongs to the successor universe level and so on. So we have $Set_0:
+%    Set_1:Set_2: \ldots$, note that $Set$ is the Agda word for type and the
+%    subscript denotes the universe level. It is allowed and encouraged when
+%    possible to write polymorphic functions wrt the universe level of the types
+%    involved. As an example, the type of the universe polymorphic identity
+%    function reads thus: $\{n : Level\}\ \{A : Set\ n\} \to A \to A$. }.
+\end{itemize}
+We humbly believe that our library, although under progress is
+a display of the potential and elegance of Agda. In
+\cite{MasRovira:2020:MastersThesis} one can find the full details of the
+presented theorems in this paper in conjunction with an extensive explanation of
+the mentioned library. The code is freely available at
+\begin{center}
+\url{https://gitlab.com/janmasrovira/interpretability-logics}.
+\end{center}
+% \section{Instructions for authors}
+% Important information pertaining to the preparation of your paper:
+% \begin{itemize}
+%   \item Please prepare your paper by editing this file (\verb|aiml20.tex|) as well as the bibliography file, \verb|aiml20.bib|.
+%   \item Please do not use includegraphics on any PDF files not having all fonts embedded. If in doubt, please convert to JPG before including.
+%   \item It is strictly prohibited to tamper with the text dimensions, including adding to the text height or width. The dimensions of the style files are already taken to the limit of what the printer of the final proceedings is able to handle. Also, please refrain from using any kind of negative white space.
+%   \item Please make sure too split lines that are too wide in the final output (avoid overfull \verb|\hbox|es).
+% \end{itemize}
+%
+%
+% \section{Introduction}
+% This is a section of the paper. A set of standard theorem environments is available, including Theorem, Proposition, Lemma, Corollary, Definition, Example, Note, Claim and Remark (see the file \verb|aiml20macro.sty| for details).
+%
+% \begin{definition}
+% This is a definition.
+% \end{definition}
+%
+% \begin{lemma}
+% This is a lemma...
+% \end{lemma}
+%
+% \begin{proof}
+% ...and this is how it's proved.
+% \end{proof}
+%
+%
+%% Bibliography
+%% Make sure to use the bibliographystyle aiml20.
+\bibliographystyle{aiml20}
+%\bibliography{refs}
+
+\begin{thebibliography}{1}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\newcommand{\enquote}[1]{``#1''}
+
+\bibitem{GorisJoosten:2011:ANewPrinciple}
+Goris, E. and J.~Joosten, \emph{A new principle in the interpretability logic
+  of all reasonable arithmetical theories}, Logic Journal of the IGPL
+  \textbf{19} (2011), pp.~14--17.
+
+\bibitem{two-new-series}
+Goris, E. and J.~J. Joosten, \emph{Two new series of principles in the
+  interpretability logic of all reasonable arithmetical theories}, Journal of
+  Symbolic Logic \textbf{85} (2020), pp.~1--25.
+
+\bibitem{JaparidzeJongh:1998:HandbookPaper}
+Japaridze, G. and D.~{de}~Jongh, \emph{The logic of provability}, in: S.~Buss,
+  editor, \emph{Handbook of proof theory}, North-Holland Publishing Co.,
+  Amsterdam, 1998 pp. 475--546.
+
+\bibitem{OverviewGeneralised}
+Joosten, J., J.~M. Rovira, L.~Mikec and M.~Vukovic, \emph{An overview of
+  generalised veltman semantics}, Shortly on the ArXiv  (2020).
+
+\bibitem{MasRovira:2020:MastersThesis}
+Mas~Rovira, J., \enquote{Frame {C}onditions for {I}nterpretability {L}ogics
+  using {G}eneralised {V}eltman {S}emantics and the {A}gda {P}roof
+  {A}ssistant,} Master's thesis, Master of Pure and Applied Logic, University
+  of Barcelona (forthcoming, 2020).
+\newline\urlprefix\url{http://diposit.ub.edu/dspace/handle/2445/133559}
+
+\bibitem{Mikec-Vukovic-20}
+Mikec, L. and M.~Vuković, \emph{Interpretability logics and generalised
+  {V}eltman semantics}, Accepted for publication in The Journal of Symbolic
+  Logic  (to appear).
+\newline\urlprefix\url{https://arxiv.org/abs/1907.03849 (preprint version)}
+
+\bibitem{norell:thesis}
+Norell, U., \enquote{Towards a practical programming language based on
+  dependent type theory,} Ph.D. thesis, Department of Computer Science and
+  Engineering, Chalmers University of Technology, SE-412 96 G\"{o}teborg,
+  Sweden (2007).
+
+\bibitem{Verbrugge}
+Verbrugge, L., \emph{Verzamelingen-veltman frames en modellen (set veltman
+  frames and models)} (1992), unpublished manuscript.
+
+\end{thebibliography}
+
+\end{document}
