@@ -78,4 +78,4 @@ Done.
 Done.
 
 "p. 4: Please give a bit more intro on Agda, e.g. mentioning that it has been developed by the first author of the present paper together with Frederik Hanghøj Iversen".
-We have given a short introduction on Agda. The first author of the paper is not the author of Agda. Agda was first designed by Ulf Norell and now it is being mostly developed at Chalmers University of Technology. Maybe the reviewer visited https://github.com/agda/agda-ocaml which I developed with Frederik.
+We have given a short introduction on Agda. We want to clarify that the first author of the paper is not the author of Agda. Agda was first designed by Ulf Norell and now it is being mostly developed at Chalmers University of Technology. Maybe the reviewer visited https://github.com/agda/agda-ocaml which Jan Mas (first author of this paper) developed with Frederik.
