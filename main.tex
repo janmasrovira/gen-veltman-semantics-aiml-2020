@@ -336,7 +336,7 @@ includes, but is not limited to, the following features:
 \item Formalisation of ordinary semantics, generalised semantics
   and a plethora of useful lemmas to work on such semantics.
 \item Due to the many possible quasi-transitivity principles available for generalised
-  semantics (\cite{OverviewGeneralised}) we have defined generalised frames to be
+  semantics (\cite{joosten2020overview}) we have defined generalised frames to be
   parameterized by such condition. All known quasi-transitivity conditions are
   included in the library and all theorems that do not directly depend on them can
   be instantiated to work for any quasi-transitivity condition. It also includes
@@ -390,26 +390,13 @@ the mentioned library. The code is freely available at
 % \end{itemize}
 %
 %
-% \section{Introduction}
-% This is a section of the paper. A set of standard theorem environments is available, including Theorem, Proposition, Lemma, Corollary, Definition, Example, Note, Claim and Remark (see the file \verb|aiml20macro.sty| for details).
-%
-% \begin{definition}
-% This is a definition.
-% \end{definition}
-%
-% \begin{lemma}
-% This is a lemma...
-% \end{lemma}
-%
-% \begin{proof}
-% ...and this is how it's proved.
-% \end{proof}
-%
-%
+
 %% Bibliography
 %% Make sure to use the bibliographystyle aiml20.
 \bibliographystyle{aiml20}
-%\bibliography{refs}
+% \bibliography{refs}
+
+
 
 \begin{thebibliography}{1}
 \expandafter\ifx\csname url\endcsname\relax
@@ -432,15 +419,15 @@ Japaridze, G. and D.~{de}~Jongh, \emph{The logic of provability}, in: S.~Buss,
   editor, \emph{Handbook of proof theory}, North-Holland Publishing Co.,
   Amsterdam, 1998 pp. 475--546.
 
-\bibitem{OverviewGeneralised}
-Joosten, J., J.~M. Rovira, L.~Mikec and M.~Vukovic, \emph{An overview of
-  generalised veltman semantics}, Shortly on the ArXiv  (2020).
+\bibitem{joosten2020overview}
+Joosten, J.~J., J.~M. Rovira, L.~Mikec and M.~Vuković, \emph{An overview of
+  generalised veltman semantics} (2020).
+\newline\urlprefix\url{https://arxiv.org/abs/2007.04722}
 
 \bibitem{MasRovira:2020:MastersThesis}
-Mas~Rovira, J., \enquote{Frame {C}onditions for {I}nterpretability {L}ogics
-  using {G}eneralised {V}eltman {S}emantics and the {A}gda {P}roof
-  {A}ssistant,} Master's thesis, Master of Pure and Applied Logic, University
-  of Barcelona (forthcoming, 2020).
+Mas~Rovira, J., \enquote{{I}nterpretability {L}ogics and {G}eneralised
+  {V}eltman {S}emantics in {A}gda,} Master's thesis, Master in Pure and Applied
+  Logic, University of Barcelona (forthcoming, 2020).
 \newline\urlprefix\url{http://diposit.ub.edu/dspace/handle/2445/133559}
 
 \bibitem{Mikec-Vukovic-20}
@@ -460,5 +447,7 @@ Verbrugge, L., \emph{Verzamelingen-veltman frames en modellen (set veltman
   frames and models)} (1992), unpublished manuscript.
 
 \end{thebibliography}
+
+
 
 \end{document}
