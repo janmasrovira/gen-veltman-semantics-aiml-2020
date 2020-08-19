@@ -25,3 +25,6 @@
 auto/
 *.synctex.gz
 /main.pdf
+*.nav
+*.snm
+/presentation/pres.pdf
