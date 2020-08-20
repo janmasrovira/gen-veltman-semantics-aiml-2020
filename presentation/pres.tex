@@ -35,7 +35,14 @@
 % but no full proofs
 % ideas and summaries are more important
 
-\newcommand{\gl}{\ensuremath{\textup{\textbf{GL}}}\xspace}
+% We cannot assume that people know the logics that we work with
+% so we have to slowly introduce them and motivate them
+% give some examples
+% The last five minutes can be used to hint at the work we have done
+% Or last four minutes
+\newcommand{\gl}{\ensuremath{\textup{GL}}\xspace}
+\newcommand{\zf}{\ensuremath{\textup{ZF}}\xspace}
+\newcommand{\veql}{\ensuremath{\textup{(V=L)}}\xspace}
 
 
 \begin{document}
@@ -75,12 +82,27 @@
 \begin{frame}
   \frametitle{Interpretability Logics}
   \textbf{Definition}
-  An interpretation of a theory $A$ into a theory $B$ is a translation $⋆$ that
-  maps the non-logical symbols in the language of $A$ to formulas in the
-  language of $B$ with the same free variables, so that
-  \[⊢_Aϕ⇒\ ⊢_Bϕ^⋆\]
-  Which one is preferred?
-  \[A⊢ϕ⇒ B⊢ϕ^⋆\]
+  We say that A interprets B if there is an interpretation of B into A.
+
+  An interpretation of a theory $B$ into a theory $A$ is a translation $⋆$ that
+  maps the non-logical symbols in the language of $B$ to formulas in the
+  language of $A$ with the same free variables, so that
+  \[B⊢ϕ⇒ A⊢ϕ^⋆\]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Interpretability Logics}
+  Examples of interpretations (copied from Visser's overview):
+  \begin{itemize}
+  \item The interpretation of arithmetic in set theory.
+    \pause
+  \item Gödel's interpretation of $\zf+\veql$ in \zf. This interpretation
+    provides a relative consistency proof of \zf + CH w.r.t. \zf.
+    \pause
+  \item The interpretation of elementary syntax in arithmetic. Important for
+    Gödel's incompleteness theorems.
+  \end{itemize}
+
 \end{frame}
 
 

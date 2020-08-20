@@ -7,7 +7,10 @@
 
   To begin with, let me briefly introduce the concepts in the title. Generalised
   Veltman semantics are a kind of relational semantics for interpretability
-  logics. We will come back to those in a second.
+  logics. They have the same flavour as Kripke semantics for intuitionistic
+  logic or for provability logic. We will come back to those in a second.
+
+  next part.
 
   Agda is a proof assistant based on dependent type theory. More on that at the
   second part of the presentation.
@@ -30,9 +33,30 @@
 
   next part.
 
-  What does A interprets B really mean?
+  What does  really mean?
 
+  We say that A interprets B if there is an interpretation from A to B.
   An interpretation of a theory A into a theory B is a translation star that
   maps the non-logical symbols in the language of A to formulas in the language
   of B so that if phi is a theorem of A, then the translation of phi is a
   theorem of B.
+
+  next part.
+
+  Let us give some examples of interpretations.
+
+  The interpretation of arithmetic in set theory. This interpretation has
+  foundational importance as it shows that numbers can be reduced to sets.
+
+  pause.
+
+  As another example, we have that Gödel's interpretation of zf plus the axiom
+  of constructibility in zf. This interpretation provides a relative
+  consistency proof of zf plus the continuum hypothesis w.r.t. zf.
+
+  pause.
+
+  As a last example, we have the interpretation of elementary syntax in
+  arithmetic. This interpretation plays a central role in the proof of Gödel's
+  First Incompleteness Theorem and in both the statement and proof the Second
+  Incompleteness Theorem.
