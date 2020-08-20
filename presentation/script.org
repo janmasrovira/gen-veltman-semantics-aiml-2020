@@ -1,0 +1,8 @@
+* Interpretability logics
+  The logic gl is the logic of provability which studies the behaviour of the
+  provability predicate. In this logic we have two modal operators. The first
+  one is box which stands for provability. And the second operator is diamond,
+  which stands for consistency. Note that usually we define diamond in terms of
+  box since saying that A is consistent is the same as saying that we cannot
+  prove the negation of A.
+* Interpretability logics

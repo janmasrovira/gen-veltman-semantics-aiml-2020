@@ -1,11 +1,40 @@
 \documentclass{beamer}
+% \usetheme{Luebeck}
+% \usetheme{Madrid}
+\usetheme{Boadilla}
 
-\usepackage[utf8]{inputenc}
+\usepackage{unicode-math}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{latexsym}
+\usepackage{cancel}
+\usepackage{xcolor}
+\usepackage{xspace}
+
 
 \title{Generalised Veltman Semantics in Agda}
-\author{Joost J. Joosten, Jan Mas Rovira and Luka Mikec.}
-\institute{Universitat de Barcelona}
+\author{Joost J. Joosten, Jan Mas Rovira and Luka Mikec}
+\institute{University of Barcelona}
 \date{August 2020}
+
+% Luka: Hi all! I agree with Joost's suggestion. Jan, also take into account
+% that since our talk is a short presentation we have about 10 minutes to
+% present (and then 5 minutes for questions). I'd suggest to focus on basics
+% (what is Veltman semantics, what is Agda etc.) and less on the results
+
+% Joost: Hi Jan, when composing the slides, please be very modest in your aims
+% Here's what Luka writes about his presentation
+% I'd suggest we focus on interpretability logics in general, then a bit about IL(All),
+% Indeed, it is good to get the basics straight
+% So, the first --at least-- five minutes should be dedicated entirely to
+% a slow and gentle introduction to interpretability logics
+% if not, the first seven
+% if you want, you can sketch the idea
+% but no full proofs
+% ideas and summaries are more important
+
+\newcommand{\gl}{\ensuremath{\textup{\textbf{GL}}}\xspace}
 
 
 \begin{document}
@@ -13,8 +42,44 @@
 \frame{\titlepage}
 
 \begin{frame}
-  \frametitle{title}
-  hello.
+  \frametitle{Introduction}
+  \begin{itemize}
+  \item Generalised Veltman semantics are a kind of relational semantics (à la
+    Kripke) for \textbf{interpretability logics}. \break \pause
+    \item Agda is a \textbf{proof assistant} based on dependent type theory.
+  \end{itemize}
 \end{frame}
+
+\begin{frame}
+  \frametitle{Interpretability Logics}
+  In the logic of provability \gl we have that:
+  \begin{itemize}
+    \item $□A$ means ``A is provable''.
+    \item $♢A$ means ``A is consistent''. Note that $♢A=¬□¬A$.
+  \end{itemize}
+  The aim of \gl is to describe the provably structural behaviour of the
+  formalised provability predicate.
+
+  \pause \vspace{0.5cm}
+
+  Interpretability logics extend the provability logic \gl. There is an
+  additional binary modal operator $▷$.
+  \begin{itemize}
+  \item $A▷B$ means ``A interprets B''.
+  \end{itemize}
+  The aim is to find a logic that describes exactly all provably structural
+  behaviour of the notion of interpretability.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Interpretability Logics}
+  An interpretation of a theory $A$ into a theory $B$ is a translation $⋆$ that
+  maps the non-logical symbols in the language of $A$ to formulas in the
+  language of $B$ with the same free variables, so that
+  \[⊢_Aϕ⇒\ ⊢_Bϕ^⋆\]
+  Which one is preferred?
+  \[A⊢ϕ⇒ B⊢ϕ^⋆\]
+\end{frame}
+
 
 \end{document}
