@@ -11,13 +11,15 @@
 \usepackage{cancel}
 \usepackage{xcolor}
 \usepackage{xspace}
+\usepackage{textcomp}
+
 
 
 \title{Generalised Veltman Semantics in Agda}
 \author{Joost J. Joosten\inst{1} \and Jan Mas Rovira\inst{1}\and Luka Mikec\inst{2}}
 \institute[shortinst]{\inst{1} University of Barcelona \and %
   \inst{2} University of Zagreb}
-\date{August 2020}
+\date{August 26th 2020}
 
 % Luka: Hi all! I agree with Joost's suggestion. Jan, also take into account
 % that since our talk is a short presentation we have about 10 minutes to
@@ -40,6 +42,9 @@
 % give some examples
 % The last five minutes can be used to hint at the work we have done
 % Or last four minutes
+\newcommand{\prin}[1]{\ensuremath{\textup{#1}}\xspace}
+\newcommand{\il}{\ensuremath{\textup{IL}}\xspace}
+\newcommand{\ilm}{\ensuremath{\textup{ILM}}\xspace}
 \newcommand{\gl}{\ensuremath{\textup{GL}}\xspace}
 \newcommand{\zf}{\ensuremath{\textup{ZF}}\xspace}
 \newcommand{\veql}{\ensuremath{\textup{(V=L)}}\xspace}
@@ -65,7 +70,7 @@
     \item $□A$ means ``A is provable''.
     \item $♢A$ means ``A is consistent''. Note that $♢A=¬□¬A$.
   \end{itemize}
-  The aim of \gl is to describe the provably structural behaviour of the
+  The aim of \gl is to describe and prove the structural behaviour of the
   formalised provability predicate.
 
   \pause \vspace{0.5cm}
@@ -75,24 +80,25 @@
   \begin{itemize}
   \item $A▷B$ means ``A interprets B''.
   \end{itemize}
-  The aim is to find a logic that describes exactly all provably structural
-  behaviour of the notion of interpretability.
+  The aim is to find a logic that describes exactly the behaviour of the notion
+  of interpretability, which is yet to be discovered.
 \end{frame}
 
 \begin{frame}
   \frametitle{Interpretability Logics}
-  \textbf{Definition}
-  We say that A interprets B if there is an interpretation of B into A.
+  \textbf{Definition} We say that a theory U interprets V if there is an
+  interpretation of V into U.
 
-  An interpretation of a theory $B$ into a theory $A$ is a translation $⋆$ that
-  maps the non-logical symbols in the language of $B$ to formulas in the
-  language of $A$ with the same free variables, so that
-  \[B⊢ϕ⇒ A⊢ϕ^⋆\]
+  An interpretation of a theory $U$ into a theory $V$ is a translation $⋆$ that
+  maps the non-logical symbols in the language of $U$ to formulas in the
+  language of $V$ with the same free variables, so that
+  \[U⊢ϕ⇒ V⊢ϕ^⋆\]
 \end{frame}
 
 \begin{frame}
-  \frametitle{Interpretability Logics}
+  \frametitle{Why Interpretability Logics matter}
   Examples of interpretations (copied from Visser's overview):
+  \vspace{0.4cm}
   \begin{itemize}
   \item The interpretation of arithmetic in set theory.
     \pause
@@ -103,6 +109,60 @@
     Gödel's incompleteness theorems.
   \end{itemize}
 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Logic \il}
+  The logic \il is the base of all interpretability logics.
+
+  \vspace{0.3cm}
+
+  \il has all the theorems of \gl plus
+  the following axioms schemes: \pause
+  \begin{itemize}
+  \item J1: $□ (A → B) → A ▷ B$;
+    \pause
+  \item J2: $A ▷ B ∧ B ▷ C → A ▷ C$;
+    \pause
+  \item J3: $(A ▷ C ∧ B ▷ C) → (A ∨ B) ▷ C$;
+    \pause
+  \item J4: $A ▷ B → ♢ A → ♢ B$;
+    \pause
+  \item J5: $♢ A ▷ A$.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Logic \ilm}
+
+  The logic ILM is defined as \il + \prin{M}, where
+  \[M≔ A ▷ B → (A ∧ □ C) ▷ (B ∧ □ C).\]
+
+  The theorems of $\textsf{ILM}$ are the set of interpretability principles that
+  are always provable in theories which are $Σ_1$ sound, have full induction and
+  prove consistency of its finite subsystems. An example of such theory
+  is $\textsf{PA}$.
+
+  % \vspace{0.4cm}
+  % \pause
+  % If $ILM⊢A▷B$ then we know that $?$.
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Agda publications}
+  Papers that use Agda (\textasciitilde 200):
+
+  \url{https://wiki.portal.chalmers.se/agda/Main/PapersUsingAgda}
+
+  \vspace{0.3cm}
+
+  \url{https://researchr.org/bibliography/agda-papers/publications}
+\end{frame}
+
+\begin{frame}
+  \centering \Huge Thank you!
 \end{frame}
 
 

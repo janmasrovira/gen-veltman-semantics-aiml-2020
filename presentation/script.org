@@ -29,16 +29,17 @@
   additional modal operator, the triangle, which stands for interpretability. We
   write A triangle B to mean that A interprets B. In interpretability logics the
   ultimate goal is to find a logic that describes the behaviour of
-  interpretability in the same way as gl does it for provability.
+  interpretability in the same way as gl does it for provability. This logic is
+  not yet known.
 
   next part.
 
-  What does  really mean?
+  What do we mean by 'A interprets B'?
 
   We say that A interprets B if there is an interpretation from A to B.
-  An interpretation of a theory A into a theory B is a translation star that
+  An interpretation of a theory A into a theory B is a translation that
   maps the non-logical symbols in the language of A to formulas in the language
-  of B so that if phi is a theorem of A, then the translation of phi is a
+  of B so that if a formula phi is a theorem of A, then the translation of phi is a
   theorem of B.
 
   next part.
@@ -60,3 +61,47 @@
   arithmetic. This interpretation plays a central role in the proof of Gödel's
   First Incompleteness Theorem and in both the statement and proof the Second
   Incompleteness Theorem.
+
+  next part.
+
+  We now define logic IL, which is the base logic of all interpretability
+  logics. As we know it extends GL and thus it has all the theorems of GL plus
+  the following axioms schemes:
+
+  pause.
+
+  Principle J1 expresses that the identity translation defines an
+  interpretation.
+
+  pause.
+
+  Principle J2 expresses that one can compose interpretations by applying one
+  translation after another.
+
+  pause.
+
+  Principle J3 allows us to construct an interpretation by cases.
+
+  pause.
+
+  Principle J4 reflects that an interpretation gives rise to relative
+  consistency.
+
+  pause.
+
+  Finally, J5 reflects the fact that from consistency we can derive an
+  interpretation, which we can do by means of the Henkin construction in
+  arithmetic.
+  # that we can perform the Henkin construction in
+  # arithmetic so that consistency provides an inner model from which an
+  # interpretation can be derived.
+
+  next part.
+
+  Consider ILM, which is one of the many interpretability logics. We define ILM
+  as IL plus the principle M, where M is defined as displayed.
+
+  It turns out that the theorems of ILM are the set of interpretability
+  principles that are provable in theories which are $Σ_1$ sound, have full
+  induction and prove consistency of any of its finite subsystems. An example of
+  such theory is PA.
