@@ -29,3 +29,6 @@ auto/
 *.snm
 /presentation/pres.pdf
 /presentation/ana.pdf
+*.vrb
+*.xml
+*.bcf

@@ -1,6 +1,7 @@
 \documentclass{beamer}
 % \usetheme{Luebeck}
 % \usetheme{Madrid}
+% \usetheme{Singapore}
 \usetheme{Boadilla}
 
 \usepackage{unicode-math}
@@ -45,13 +46,16 @@
 % give some examples
 % The last five minutes can be used to hint at the work we have done
 % Or last four minutes
-\newcommand{\prin}[1]{\ensuremath{\textup{#1}}\xspace}
-\newcommand{\il}{\ensuremath{\textup{IL}}\xspace}
-\newcommand{\ilm}{\ensuremath{\textup{ILM}}\xspace}
-\newcommand{\gl}{\ensuremath{\textup{GL}}\xspace}
-\newcommand{\zf}{\ensuremath{\textup{ZF}}\xspace}
-\newcommand{\veql}{\ensuremath{\textup{(V=L)}}\xspace}
-
+\newcommand{\prin}[1]{\ensuremath{\textbf{\textup{#1}}}\xspace}
+\newcommand{\il}{\prin{IL}}
+\newcommand{\ilm}{\prin{ILM}}
+\newcommand{\gl}{\prin{GL}}
+\newcommand{\zf}{\prin{ZF}}
+\newcommand{\ch}{\prin{CH}}
+\newcommand{\veql}{\prin{(V=L)}}
+\newcommand{\rn}{\ensuremath{\prin{R}^n}\xspace}
+\newcommand{\rsn}{\ensuremath{\prin{R}_n}\xspace}
+\newcommand{\principle}[1]{\text{$\mathsf{#1}$}}
 
 \begin{document}
 
@@ -74,17 +78,17 @@
     \item $♢A$ means ``A is consistent''. Note that $♢A=¬□¬A$.
   \end{itemize}
   The aim of \gl is to describe and prove the structural behaviour of the
-  formalised provability predicate.
+  provability predicate.
 
   \pause \vspace{0.5cm}
 
-  Interpretability logics extend the provability logic \gl. There is an
-  additional binary modal operator $▷$.
+  Interpretability logics extend the provability logic \gl. The language is
+  $⟨→,⊥,▷⟩$ and we can define $□,♢,∧,∨$ with the usual meaning.
   \begin{itemize}
   \item $A▷B$ means ``A interprets B''.
   \end{itemize}
-  The aim is to find a logic that describes exactly the behaviour of the notion
-  of interpretability, which is yet to be discovered.
+  The aim is to find a logic that describes the behaviour
+  of the interpretability predicate for arithmetical theories.
 \end{frame}
 
 \begin{frame}
@@ -106,7 +110,7 @@
   \item The interpretation of arithmetic in set theory.
     \pause
   \item Gödel's interpretation of $\zf+\veql$ in \zf. This interpretation
-    provides a relative consistency proof of \zf + CH w.r.t. \zf.
+    provides a relative consistency proof of \zf + \ch w.r.t. \zf.
     \pause
   \item The interpretation of elementary syntax in arithmetic. Important for
     Gödel's incompleteness theorems.
@@ -183,17 +187,57 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Agda}
+  \frametitle{Frame conditions}
+  Given any principle $P$ we say that a first order (or higher order) formula
+  $(P)_{gen}$ is the \textbf{frame condition} for $P$ if for any GVF $F$ we have
+  \[F⊨(P)_{gen}⇔F⊩P\]
+  Where $F⊩P$ iff $⟨F,V⟩⊩P$ for any valuation $V$.
+  \pause
+
+  \vspace{0.7cm}
+
+  Example: The frame condition $(M)_{gen}$ is
+  \[ ∀w,x,V(xS_wV⇒ ∃V'⊆V(xS_wV',∀v'∈V'∀z(v'Rz⇒xRz))).\]
 \end{frame}
 
 \begin{frame}
-  \frametitle{Agda}
+  \frametitle{The series of principles \rn and \rsn}
+  The series of principles \rn and \rsn are defined in \cite{two-new-series} by
+  Goris and Joosten.
 
-  Agda is a proof assistant based on an extension of Martin Löf's constructive
+  They appear in the (best known) lower bound of \prin{IL(All)}, which is
+  $\prin{ILWR}^n\prin{R}_n$.
+  \begin{flalign*}
+    U_0 &≔ ♢¬(D_0▷¬C) \\
+    U_{r+1} &≔ ♢((Dᵣ▷D_{r+1}) ∧ Uᵣ) \\
+    \\
+    R⁰& ≔ A ▷ B → ¬ (A ▷ ¬ C) ▷ B ∧ □ C \\
+    R^{n+1}& ≔ A ▷ B → ((D_{n}▷A) ∧ U_{n}) ▷ B ∧ □ C
+  \end{flalign*}
+
+  We have found frame conditions for generalised Veltman semantics for $R^n$ and
+  $R_1$. The proofs have been formalised in Agda.
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Agda}
+  Agda is a \textbf{proof assistant} based on an extension of Martin Löf's constructive
   type theory.
 
-  \vspace{0.4cm}
+  \pause
+  How we prove things in Agda? We use types to express mathematical properties
+  and then we construct a term of that type which shows that there exists a proof
+  for that property.
 
+  \pause
+  Example:
+\begin{verbatim}
+ ⊩J1 : ∀ {M w A B} → M , w ⊩ □ (A ↝ B) ↝ A ▷ B
+ ⊩J1 = ...
+\end{verbatim}
+
+  \vspace{0.3cm}
+  \pause
   Papers that use Agda (\textasciitilde 200):
 
   \url{https://wiki.portal.chalmers.se/agda/Main/PapersUsingAgda}
@@ -203,17 +247,20 @@
   \url{https://researchr.org/bibliography/agda-papers/publications}
 \end{frame}
 
+
 \begin{frame}
   \frametitle{Agda formalisation}
-  Our library includes:
+  Our Agda library includes (\textasciitilde 5k lines of code):
   \begin{itemize}
   \item Definition of ordinary and generalised Veltman Semantics.
   \item Definition of logic IL and many of the relevant interpretability
-    principles.
-  \item A proof of frame completeness for many interpretability principles for
-    both ordinary and generalised semantics. These include $M$, $M_0$, $P$, $R$.
-  \item A novel generalised frame condition for $R^n$ and the corresponding
-    proof.
+    principles in conjunction with their proven frame conditions. These include
+    $\principle{M}$, $\principle{P_0}$, $\principle{R}$, $\principle{M_0}$ for
+    both semantics and $\principle{R^n}$, $\principle{R_1}$ for generalised
+    semantics.
+  \item A verified embedded domain specific language for Hilbert style proofs
+    for the logic \il.
+  \item and more... (\cite{MasRovira:2020:MastersThesis})
   \end{itemize}
 \end{frame}
 
@@ -230,7 +277,6 @@
 \end{verbatim}
 \end{frame}
 
-
 \begin{frame}
   \frametitle{Open source}
   \centering
@@ -238,19 +284,13 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{References}
-  WIP
-\end{frame}
-
-
-\begin{frame}
   \centering \Huge Thank you!
 \end{frame}
 
 \begin{frame}[allowframebreaks]
-  \frametitle{References}
-  % \bibliographystyle{apalike}
+  \nocite{MasRovira:2020:MastersThesis}
+  \nocite{joosten2020overview}
+  \printbibliography
 \end{frame}
-
 
 \end{document}
