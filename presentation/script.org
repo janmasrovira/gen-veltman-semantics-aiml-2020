@@ -15,6 +15,7 @@
   Agda is a proof assistant based on dependent type theory. More on that at the
   second part of the presentation.
 
+  next part.
 
   The logic gl is the logic of provability which studies the behaviour of the
   provability predicate. In this logic we have two modal operators. The first
@@ -28,9 +29,12 @@
   Interpretability logics extend gl and they expand the language with an
   additional modal operator, the triangle, which stands for interpretability. We
   write A triangle B to mean that A interprets B. In interpretability logics the
-  ultimate goal is to find a logic that describes the behaviour of
+  one of the most important goals is to find a logic that describes the behaviour of
   interpretability in the same way as gl does it for provability. This logic is
   not yet known.
+
+  We only consider arithmetical theories which have full induction and
+  exponentiation.
 
   next part.
 

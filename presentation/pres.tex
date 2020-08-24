@@ -12,7 +12,10 @@
 \usepackage{xcolor}
 \usepackage{xspace}
 \usepackage{textcomp}
+\setmonofont{FreeMono}
 
+\usepackage[style=ieee]{biblatex}
+\bibliography{refs}
 
 
 \title{Generalised Veltman Semantics in Agda}
@@ -91,13 +94,13 @@
 
   An interpretation of a theory $U$ into a theory $V$ is a translation $⋆$ that
   maps the non-logical symbols in the language of $U$ to formulas in the
-  language of $V$ with the same free variables, so that
+  language of $V$ with the same free variables, in a way such that
   \[U⊢ϕ⇒ V⊢ϕ^⋆\]
 \end{frame}
 
 \begin{frame}
-  \frametitle{Why Interpretability Logics matter}
-  Examples of interpretations (copied from Visser's overview):
+  \frametitle{Examples of interpretations}
+  Examples of interpretations (\cite{visser1997overview}):
   \vspace{0.4cm}
   \begin{itemize}
   \item The interpretation of arithmetic in set theory.
@@ -115,10 +118,8 @@
   \frametitle{Logic \il}
   The logic \il is the base of all interpretability logics.
 
-  \vspace{0.3cm}
-
-  \il has all the theorems of \gl plus
-  the following axioms schemes: \pause
+  \vspace{0.3cm} The rules are modus ponens and necessitation. It has all the
+  theorems of \gl plus the following axioms schemes: \pause
   \begin{itemize}
   \item J1: $□ (A → B) → A ▷ B$;
     \pause
@@ -136,7 +137,7 @@
   \frametitle{Logic \ilm}
 
   The logic ILM is defined as \il + \prin{M}, where
-  \[M≔ A ▷ B → (A ∧ □ C) ▷ (B ∧ □ C).\]
+  \[\prin{M}≔ A ▷ B → (A ∧ □ C) ▷ (B ∧ □ C).\]
 
   The theorems of $\textsf{ILM}$ are the set of interpretability principles that
   are always provable in theories which are $Σ_1$ sound, have full induction and
@@ -146,12 +147,53 @@
   % \vspace{0.4cm}
   % \pause
   % If $ILM⊢A▷B$ then we know that $?$.
-
 \end{frame}
 
+\begin{frame}
+  \frametitle{Generalised Veltman Semantics}
+  A \textbf{generalised Veltman frame} (GVF) is a tuple $⟨W,R,S⟩$ with $R⊆W×W$,
+  $S⊆W×W×(𝒫(W)∖\{∅\})$ where:
+  \begin{itemize}
+    \item $R$ is transitive and conversely well-founded;
+    \item if $uS_wY$ then $wRu$ and $R[w]⊆Y$;
+    \item if $wRu$ then $uS_w\{u\}$;
+    \item if $wRuRv$ then $uS_w\{v\}$;
+    \item if $uS_wY$ and for all $y∈Y$ we have $yS_wZ_y$ then $uS_w\left(⋃_{y∈Y}Z_y\right)$.
+  \end{itemize}
+
+  \pause
+  \vspace{0.3cm}
+  A \textbf{generalised Veltman model} (GVM) is a tuple $⟨W,R,S,V⟩$ where
+  $⟨W,R,S⟩$ is a GVF and $V⊆W×Var$ is a valuation.
+\end{frame}
 
 \begin{frame}
-  \frametitle{Agda publications}
+  \frametitle{Generalised Veltman Semantics}
+  Given a GVM $⟨W,R,S,V⟩$ we define $⊩\ ⊆W×Fm$ as follows:
+  \begin{itemize}
+    \item $w⊮⊥$;
+    \item $w⊩p$ iff $⟨w,p⟩∈V$;
+    \item $w⊩A→B$ iff $w⊩A$ implies $w⊩B$;
+    \item $w⊩□A$ iff for all $u$ such that $wRu$ we have $u⊩A$;
+    \item $w⊩♢A$ iff there is some $u$ such that $wRu$ and $u⊩A$;
+      \pause
+    \item $w⊩A▷B$ iff $wRu$ and $u⊩A$ implies that there exists some $Y$ such
+      that $uS_wY$ and for all $y∈Y$ we have $y⊩B$.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Agda}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Agda}
+
+  Agda is a proof assistant based on an extension of Martin Löf's constructive
+  type theory.
+
+  \vspace{0.4cm}
+
   Papers that use Agda (\textasciitilde 200):
 
   \url{https://wiki.portal.chalmers.se/agda/Main/PapersUsingAgda}
@@ -162,7 +204,52 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Agda formalisation}
+  Our library includes:
+  \begin{itemize}
+  \item Definition of ordinary and generalised Veltman Semantics.
+  \item Definition of logic IL and many of the relevant interpretability
+    principles.
+  \item A proof of frame completeness for many interpretability principles for
+    both ordinary and generalised semantics. These include $M$, $M_0$, $P$, $R$.
+  \item A novel generalised frame condition for $R^n$ and the corresponding
+    proof.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Hilbert style proofs in Agda}
+\begin{verbatim}
+⊢A▷A : ∀ {A} → [] ⊢ A ▷ A
+⊢A▷A {A} =
+  begin[ 0 ] A ↝ A                    By ⊢A↝A
+       [ 1 ] □ (A ↝ A)                ByNec 0
+       [ 2 ] □ (A ↝ A) ↝ (A ▷ A)      By J1
+       [ 3 ] A ▷ A                    ByMP 2 , 1
+       ■
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Open source}
+  \centering
+  \url{https://gitlab.com/janmasrovira/interpretability-logics}
+\end{frame}
+
+\begin{frame}
+  \frametitle{References}
+  WIP
+\end{frame}
+
+
+\begin{frame}
   \centering \Huge Thank you!
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{References}
+  % \bibliographystyle{apalike}
 \end{frame}
 
 
