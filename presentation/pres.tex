@@ -1,19 +1,5 @@
 \documentclass[xcolor={x11names}]{beamer}
-% \usetheme{Luebeck}
-% \usetheme{Madrid}
-% \usetheme{Singapore}
-% \usetheme{Boadilla}
 \usetheme{Frankfurt}
-% \usetheme{Singapore}
-
-
-% \useoutertheme{miniframes} % Tiny circles
-% %% circles without subsections (Fraknfurt theme)
-% \usepackage{remreset}
-% \makeatletter
-% \@removefromreset{subsection}{section}
-% \makeatother
-% \setcounter{subsection}{1}
 
 \usepackage{unicode-math}
 \usepackage{amsmath}
@@ -31,7 +17,7 @@
 \usepackage[style=authoryear]{biblatex}
 \hypersetup{colorlinks=true,urlcolor=DodgerBlue4,linkcolor=Firebrick4,citecolor=Firebrick4}
 
-% link on the authors as well.
+% link over the authors as well.
 \DeclareCiteCommand{\cite}
 {\usebibmacro{prenote}}
 {\usebibmacro{citeindex}%
@@ -191,7 +177,7 @@
   A \textbf{generalised Veltman model} (GVM) is a tuple $⟨W,R,S,V⟩$ where
   $⟨W,R,S⟩$ is a GVF and $V⊆W×Var$ is a valuation.
 
-  Soundness and completeness.
+  Mention soundness and completeness.
 \end{frame}
 
 \begin{frame}
@@ -238,7 +224,7 @@
 
   The series of principles \rn and \rsn are due to \cite{two-new-series}.
 
-  \vspace{0.3cm}
+  \vspace{0.2cm}
   Definition of $\rn$:
   \begin{flalign*}
     U_0 &≔ ♢¬(D_0▷¬C) \\
@@ -263,16 +249,7 @@
   and then we construct a term of that type which shows that there exists a proof
   for that property.
 
-  \pause
-  Example (proof omitted):
-\begin{verbatim}
- ⊩J1 : ∀ {W R S V}
-    {M : Model W R S V} {w : W} {A B : Fm}
-   → M , w ⊩ □ (A ↝ B) ↝ A ▷ B
- ⊩J1 = ...
-\end{verbatim}
-
-  \vspace{0.1cm}
+  \vspace{0.3cm}
   \pause
   Papers that use Agda (\textasciitilde 200):
 
@@ -283,6 +260,21 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{Agda theorem example}
+  Given any GVM $M=⟨W,R,S,V⟩$, world $w∈W$ and formulas $A,B$ we have that
+  \[M,w⊩□ (A → B) → A ▷ B\]
+  \pause
+  The property as an Agda type:
+\begin{verbatim}
+  ∀ {W R S V}
+    {M : Model W R S V}
+    {w : W}
+    {A B : Fm}
+   →
+    M , w ⊩ □ (A ↝ B) ↝ A ▷ B
+\end{verbatim}
+\end{frame}
 
 \begin{frame}
   \frametitle{Agda formalisation}
@@ -302,6 +294,9 @@
 
 \begin{frame}[fragile]
   \frametitle{Hilbert style proofs in Agda}
+
+  Let us show $⊢_{\il}A▷A$ using our language.
+  \vspace{0.6cm}
 \begin{semiverbatim}
 ⊢A▷A : \{A : Fm\} → [] ⊢ A ▷ A
 \uncover<2->{⊢A▷A \{A\} =
@@ -325,7 +320,6 @@
 
 \begin{frame}[allowframebreaks]
   \frametitle{References}
-  \nocite{MasRovira:2020:MastersThesis}
   \nocite{joosten2020overview}
   \printbibliography
 \end{frame}
