@@ -1,51 +1,59 @@
-\documentclass{beamer}
+\documentclass[xcolor={x11names}]{beamer}
 % \usetheme{Luebeck}
 % \usetheme{Madrid}
 % \usetheme{Singapore}
-\usetheme{Boadilla}
+% \usetheme{Boadilla}
+\usetheme{Frankfurt}
+% \usetheme{Singapore}
+
+
+% \useoutertheme{miniframes} % Tiny circles
+% %% circles without subsections (Fraknfurt theme)
+% \usepackage{remreset}
+% \makeatletter
+% \@removefromreset{subsection}{section}
+% \makeatother
+% \setcounter{subsection}{1}
 
 \usepackage{unicode-math}
 \usepackage{amsmath}
+\usepackage{graphicx}
 \usepackage{amssymb}
+\usepackage{remreset}
 \usepackage{mathtools}
 \usepackage{latexsym}
 \usepackage{cancel}
-\usepackage{xcolor}
+\usepackage{hyperref}
 \usepackage{xspace}
 \usepackage{textcomp}
 \setmonofont{FreeMono}
 
-\usepackage[style=ieee]{biblatex}
+\usepackage[style=authoryear]{biblatex}
+\hypersetup{colorlinks=true,urlcolor=DodgerBlue4,linkcolor=Firebrick4,citecolor=Firebrick4}
+
+% link on the authors as well.
+\DeclareCiteCommand{\cite}
+{\usebibmacro{prenote}}
+{\usebibmacro{citeindex}%
+  \printtext[bibhyperref]{\usebibmacro{cite}}}
+{\multicitedelim}
+{\usebibmacro{postnote}}
+
+% tiny circles without subsections
+\makeatletter
+\@removefromreset{subsection}{section}
+\makeatother
+\setcounter{subsection}{1}
+
 \bibliography{refs}
 
 
 \title{Generalised Veltman Semantics in Agda}
-\author{Joost J. Joosten\inst{1} \and Jan Mas Rovira\inst{1}\and Luka Mikec\inst{2}}
-\institute[shortinst]{\inst{1} University of Barcelona \and %
+\author[Joosten, Mas, Mikec]{Joost J. Joosten\inst{1} \and Jan Mas Rovira\inst{1}\and Luka Mikec\inst{2}}
+\institute[UB, UZ]{\inst{1} University of Barcelona \and
   \inst{2} University of Zagreb}
-\date{August 26th 2020}
+\date[AiML 2020]{Advances in Modal Logic, August 26th 2020}
 
-% Luka: Hi all! I agree with Joost's suggestion. Jan, also take into account
-% that since our talk is a short presentation we have about 10 minutes to
-% present (and then 5 minutes for questions). I'd suggest to focus on basics
-% (what is Veltman semantics, what is Agda etc.) and less on the results
-
-% Joost: Hi Jan, when composing the slides, please be very modest in your aims
-% Here's what Luka writes about his presentation
-% I'd suggest we focus on interpretability logics in general, then a bit about IL(All),
-% Indeed, it is good to get the basics straight
-% So, the first --at least-- five minutes should be dedicated entirely to
-% a slow and gentle introduction to interpretability logics
-% if not, the first seven
-% if you want, you can sketch the idea
-% but no full proofs
-% ideas and summaries are more important
-
-% We cannot assume that people know the logics that we work with
-% so we have to slowly introduce them and motivate them
-% give some examples
-% The last five minutes can be used to hint at the work we have done
-% Or last four minutes
 \newcommand{\prin}[1]{\ensuremath{\textbf{\textup{#1}}}\xspace}
 \newcommand{\il}{\prin{IL}}
 \newcommand{\ilm}{\prin{ILM}}
@@ -61,6 +69,7 @@
 
 \frame{\titlepage}
 
+\section{Introduction}
 \begin{frame}
   \frametitle{Introduction}
   \begin{itemize}
@@ -68,38 +77,6 @@
     Kripke) for \textbf{interpretability logics}. \break \pause
     \item Agda is a \textbf{proof assistant} based on dependent type theory.
   \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Interpretability Logics}
-  In the logic of provability \gl we have that:
-  \begin{itemize}
-    \item $□A$ means ``A is provable''.
-    \item $♢A$ means ``A is consistent''. Note that $♢A=¬□¬A$.
-  \end{itemize}
-  The aim of \gl is to describe and prove the structural behaviour of the
-  provability predicate.
-
-  \pause \vspace{0.5cm}
-
-  Interpretability logics extend the provability logic \gl. The language is
-  $⟨→,⊥,▷⟩$ and we can define $□,♢,∧,∨$ with the usual meaning.
-  \begin{itemize}
-  \item $A▷B$ means ``A interprets B''.
-  \end{itemize}
-  The aim is to find a logic that describes the behaviour
-  of the interpretability predicate for arithmetical theories.
-\end{frame}
-
-\begin{frame}
-  \frametitle{Interpretability Logics}
-  \textbf{Definition} We say that a theory U interprets V if there is an
-  interpretation of V into U.
-
-  An interpretation of a theory $U$ into a theory $V$ is a translation $⋆$ that
-  maps the non-logical symbols in the language of $U$ to formulas in the
-  language of $V$ with the same free variables, in a way such that
-  \[U⊢ϕ⇒ V⊢ϕ^⋆\]
 \end{frame}
 
 \begin{frame}
@@ -115,23 +92,67 @@
   \item The interpretation of elementary syntax in arithmetic. Important for
     Gödel's incompleteness theorems.
   \end{itemize}
+\end{frame}
+
+\section{Interpretability Logics}
+\begin{frame}
+  \frametitle{Interpretability Logics}
+  In the logic of provability \gl we have that:
+  \begin{itemize}
+    \item $□A$ means ``A is provable''.
+    \item $♢A$ means ``A is consistent''. Note that $♢A=¬□¬A$.
+  \end{itemize}
+  The aim of \gl is to describe and prove the structural behaviour of the
+  provability predicate.
+
+  \pause \vspace{0.2cm}
+
+  Interpretability logics extend the provability logic \gl. The language is
+  $⟨→,⊥,□,▷⟩$ and we can define $♢,∧,∨$ in the usual way.
+  \begin{itemize}
+  \item $A▷B$ means ``T + A* interprets T + B*''.
+  \end{itemize}
+  Given a reasonable arithmetical theory $\prin{T}$ the aim is to find the logic
+  $\prin{IL(T)}$ which describes the structural behaviour of its
+  interpretability predicate.
+  \[\prin{IL(T)}⊢A⇔ \prin{T}⊢A^*\text{, for any realisation *.} \]
 
 \end{frame}
 
 \begin{frame}
+  \frametitle{Arithmetical realisation}
+  Given an arithmetical theory $\prin{T}$ with language $ℒ$, an arithmetical
+  realisation $*$ is a map from interpretability formulas to sentences of
+  $ℒ$.
+  \begin{itemize}
+    \item $p^*$ is a sentence of $ℒ$;
+    \item $⊥^*$ is $0=1$;
+    \item $(A \to B)^* = A^* \to B^*$;
+    \item $(A \rhd B)^* = \mathsf{Int}_{\prin{T}}(\ulcorner A^* \urcorner, \ulcorner B^*\urcorner)$;
+    \item $(□A)^* = \mathsf{Prov}_{\prin{T}}(\ulcorner A^* \urcorner)$.
+  \end{itemize}
+  %   \pause
+  %   We are concerned with interpretability with respect to some theory $T$.
+  %   \[T+A▷T+B\]
+\end{frame}
+
+\begin{frame}
   \frametitle{Logic \il}
-  The logic \il is the base of all interpretability logics.
+  The logic \il is contained in almost all interpretability logics.
 
   \vspace{0.3cm} The rules are modus ponens and necessitation. It has all the
   theorems of \gl plus the following axioms schemes: \pause
+
+  % In particular, you should add a pair of brackets in J3 and two in J2, on in
+  % J4 (we’re not type-theorists)
   \begin{itemize}
-  \item J1: $□ (A → B) → A ▷ B$;
+  \item J1: $□ (A → B) → (A ▷ B)$;
     \pause
-  \item J2: $A ▷ B ∧ B ▷ C → A ▷ C$;
+  \item J2: $(A ▷ B) ∧ (B ▷ C) → (A ▷ C)$;
     \pause
-  \item J3: $(A ▷ C ∧ B ▷ C) → (A ∨ B) ▷ C$;
+  \item J3: $(A ▷ C) ∧ (B ▷ C) → (A ∨ B) ▷ C$;
     \pause
-  \item J4: $A ▷ B → ♢ A → ♢ B$;
+  \item J4: $(A ▷ B) → (♢ A → ♢ B)$;
     \pause
   \item J5: $♢ A ▷ A$.
   \end{itemize}
@@ -144,22 +165,22 @@
   \[\prin{M}≔ A ▷ B → (A ∧ □ C) ▷ (B ∧ □ C).\]
 
   The theorems of $\textsf{ILM}$ are the set of interpretability principles that
-  are always provable in theories which are $Σ_1$ sound, have full induction and
-  prove consistency of its finite subsystems. An example of such theory
-  is $\textsf{PA}$.
+  are always provable in theories which are $Σ_1$ sound and have full induction.
+  An example of such theory is $\textsf{PA}$, thus $\prin{IL(PA)}=\ilm$
+  (\cite{il-peano}).
 
-  % \vspace{0.4cm}
-  % \pause
-  % If $ILM⊢A▷B$ then we know that $?$.
+  % TODO MISSING REFERENCE
+
 \end{frame}
 
+\section{Semantics and frame conditions}
 \begin{frame}
-  \frametitle{Generalised Veltman Semantics}
-  A \textbf{generalised Veltman frame} (GVF) is a tuple $⟨W,R,S⟩$ with $R⊆W×W$,
-  $S⊆W×W×(𝒫(W)∖\{∅\})$ where:
+  \frametitle{Generalised Veltman Semantics (Verbrugge 19**)}
+  A \textbf{generalised Veltman frame} (GVF) is a tuple $⟨W,R,\{S_w:w∈W\}⟩$ with
+  $R⊆W×W$ and $S_w⊆W×(𝒫(W)∖\{∅\})$.\\ We write $uS_wY$ instead of $⟨u,Y⟩∈S_w$.
   \begin{itemize}
     \item $R$ is transitive and conversely well-founded;
-    \item if $uS_wY$ then $wRu$ and $R[w]⊆Y$;
+    \item if $uS_wY$ then $wRu$ and $\{v:wRv\}⊆Y$;
     \item if $wRu$ then $uS_w\{u\}$;
     \item if $wRuRv$ then $uS_w\{v\}$;
     \item if $uS_wY$ and for all $y∈Y$ we have $yS_wZ_y$ then $uS_w\left(⋃_{y∈Y}Z_y\right)$.
@@ -169,6 +190,8 @@
   \vspace{0.3cm}
   A \textbf{generalised Veltman model} (GVM) is a tuple $⟨W,R,S,V⟩$ where
   $⟨W,R,S⟩$ is a GVF and $V⊆W×Var$ is a valuation.
+
+  Soundness and completeness.
 \end{frame}
 
 \begin{frame}
@@ -179,11 +202,15 @@
     \item $w⊩p$ iff $⟨w,p⟩∈V$;
     \item $w⊩A→B$ iff $w⊩A$ implies $w⊩B$;
     \item $w⊩□A$ iff for all $u$ such that $wRu$ we have $u⊩A$;
-    \item $w⊩♢A$ iff there is some $u$ such that $wRu$ and $u⊩A$;
+    % \item $w⊩♢A$ iff there is some $u$ such that $wRu$ and $u⊩A$;
       \pause
     \item $w⊩A▷B$ iff $wRu$ and $u⊩A$ implies that there exists some $Y$ such
       that $uS_wY$ and for all $y∈Y$ we have $y⊩B$.
   \end{itemize}
+  \begin{figure}[t]
+    \includegraphics[scale=0.8]{img/a-rhd-b}
+    \centering
+  \end{figure}
 \end{frame}
 
 \begin{frame}
@@ -201,24 +228,31 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{The series of principles \rn and \rsn}
-  The series of principles \rn and \rsn are defined in \cite{two-new-series} by
-  Goris and Joosten.
+  \frametitle{\prin{IL(All)} and the series of principles \rn and \rsn}
+  The logic \prin{IL(All)} is the intersection of interpretability
+  logics of all reasonable arithmetical theories.
 
-  They appear in the (best known) lower bound of \prin{IL(All)}, which is
-  $\prin{ILWR}^n\prin{R}_n$.
+  \pause
+
+  The best known lower bound for \prin{IL(All)} is $\prin{ILWR}^n\prin{R}_n$.
+
+  The series of principles \rn and \rsn are due to \cite{two-new-series}.
+
+  \vspace{0.3cm}
+  Definition of $\rn$:
   \begin{flalign*}
     U_0 &≔ ♢¬(D_0▷¬C) \\
     U_{r+1} &≔ ♢((Dᵣ▷D_{r+1}) ∧ Uᵣ) \\
-    \\
     R⁰& ≔ A ▷ B → ¬ (A ▷ ¬ C) ▷ B ∧ □ C \\
     R^{n+1}& ≔ A ▷ B → ((D_{n}▷A) ∧ U_{n}) ▷ B ∧ □ C
   \end{flalign*}
 
+  \pause
   We have found frame conditions for generalised Veltman semantics for $R^n$ and
   $R_1$. The proofs have been formalised in Agda.
 \end{frame}
 
+\section{Agda formalisation}
 \begin{frame}[fragile]
   \frametitle{Agda}
   Agda is a \textbf{proof assistant} based on an extension of Martin Löf's constructive
@@ -230,21 +264,23 @@
   for that property.
 
   \pause
-  Example:
+  Example (proof omitted):
 \begin{verbatim}
- ⊩J1 : ∀ {M w A B} → M , w ⊩ □ (A ↝ B) ↝ A ▷ B
+ ⊩J1 : ∀ {W R S V}
+    {M : Model W R S V} {w : W} {A B : Fm}
+   → M , w ⊩ □ (A ↝ B) ↝ A ▷ B
  ⊩J1 = ...
 \end{verbatim}
 
-  \vspace{0.3cm}
+  \vspace{0.1cm}
   \pause
   Papers that use Agda (\textasciitilde 200):
 
-  \url{https://wiki.portal.chalmers.se/agda/Main/PapersUsingAgda}
+  \begin{itemize}
+  \item \href{https://wiki.portal.chalmers.se/agda/Main/PapersUsingAgda}{wiki.portal.chalmers.se/agda/Main/PapersUsingAgda}
 
-  \vspace{0.3cm}
-
-  \url{https://researchr.org/bibliography/agda-papers/publications}
+  \item \href{https://researchr.org/bibliography/agda-papers/publications}{researchr.org/bibliography/agda-papers/publications}
+  \end{itemize}
 \end{frame}
 
 
@@ -260,27 +296,27 @@
     semantics.
   \item A verified embedded domain specific language for Hilbert style proofs
     for the logic \il.
-  \item and more... (\cite{MasRovira:2020:MastersThesis})
+  \item and much more... (see reference \cite{MasRovira:2020:MastersThesis})
   \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
   \frametitle{Hilbert style proofs in Agda}
-\begin{verbatim}
-⊢A▷A : ∀ {A} → [] ⊢ A ▷ A
-⊢A▷A {A} =
-  begin[ 0 ] A ↝ A                    By ⊢A↝A
-       [ 1 ] □ (A ↝ A)                ByNec 0
-       [ 2 ] □ (A ↝ A) ↝ (A ▷ A)      By J1
-       [ 3 ] A ▷ A                    ByMP 2 , 1
-       ■
-\end{verbatim}
+\begin{semiverbatim}
+⊢A▷A : {A : Fm} → [] ⊢ A ▷ A
+\uncover<2->{⊢A▷A {A} =
+  begin[ 0 ] A ↝ A                 By ⊢A↝A}
+\uncover<3->{       [ 1 ] □ (A ↝ A)             ByNec 0}
+\uncover<4->{       [ 2 ] □ (A ↝ A) ↝ (A ▷ A)   By J1}
+\uncover<5->{       [ 3 ] A ▷ A                 ByMP 2 , 1
+       ■}
+\end{semiverbatim}
 \end{frame}
 
 \begin{frame}
   \frametitle{Open source}
   \centering
-  \url{https://gitlab.com/janmasrovira/interpretability-logics}
+  \href{https://gitlab.com/janmasrovira/interpretability-logics}{gitlab.com/janmasrovira/interpretability-logics}
 \end{frame}
 
 \begin{frame}
@@ -288,6 +324,7 @@
 \end{frame}
 
 \begin{frame}[allowframebreaks]
+  \frametitle{References}
   \nocite{MasRovira:2020:MastersThesis}
   \nocite{joosten2020overview}
   \printbibliography
