@@ -303,8 +303,8 @@
 \begin{frame}[fragile]
   \frametitle{Hilbert style proofs in Agda}
 \begin{semiverbatim}
-⊢A▷A : {A : Fm} → [] ⊢ A ▷ A
-\uncover<2->{⊢A▷A {A} =
+⊢A▷A : \{A : Fm\} → [] ⊢ A ▷ A
+\uncover<2->{⊢A▷A \{A\} =
   begin[ 0 ] A ↝ A                 By ⊢A↝A}
 \uncover<3->{       [ 1 ] □ (A ↝ A)             ByNec 0}
 \uncover<4->{       [ 2 ] □ (A ↝ A) ↝ (A ▷ A)   By J1}
